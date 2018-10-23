@@ -7,8 +7,9 @@ mnist = tf.keras.datasets.mnist
 # Hyperparameters
 start_time = time.time()
 metrics=['accuracy']
-EPOCHS = 25 
-STOCH_BATCH = 512
+EPOCHS = 500
+STOCH_BATCH = 256
+ROUNDING = 6
 
 # Prepare datasets
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -28,17 +29,15 @@ y_ours = np.array(ourdata_y)
 # Define model
 model = tf.keras.models.Sequential([
     tf.keras.layers.Flatten(input_shape=(28,28)),
-    tf.keras.layers.Dense(250, activation=tf.nn.relu),
-    tf.keras.layers.Dense(100, activation=tf.nn.relu),
-    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dense(500, activation=tf.nn.sigmoid),
     tf.keras.layers.Dense(10, activation=tf.nn.softmax)
 ])
 
 # Create and train model. Define custom evaluation
-model.compile(optimizer='adam',
+model.compile(optimizer='sgd',
               loss='sparse_categorical_crossentropy',
               metrics=metrics)
-model.fit(x_train, y_train, epochs=EPOCHS, batch_size=STOCH_BATCH)
+history = model.fit(x_train, y_train, epochs=EPOCHS, batch_size=STOCH_BATCH)
 def evaluate_set(x_set, y_set):
     scores = model.evaluate(x_set, y_set)
     statistics = dict()
@@ -47,21 +46,24 @@ def evaluate_set(x_set, y_set):
         value = scores[i + 1] 
         statistics[key] = value
     return statistics
+print("Training finished. Gathering data")
 
 # Gather evaluation statistics
 guess = model.predict(x_ours)
 train_stats = evaluate_set(x_train, y_train)
 test_stats = evaluate_set(x_test, y_test)
 our_stats = evaluate_set(x_ours, y_ours)
+loss = history.history["loss"][-1]
 
 # Output
 print("----------------------- TEST RESULTS ------------------------\n")
 print("Delta time (s): " + str(time.time() - start_time))
+print("Final training loss: " + str(round(loss, ROUNDING)))
 print()
 
-print("Train stats: " + " ".join(["{0} {1}".format(key, value) for key, value in train_stats.items()]))
-print("Test stats: " + " ".join(["{0} {1}".format(key, value) for key, value in test_stats.items()]))
-print("Our stats: " + " ".join(["{0} {1}".format(key, value) for key, value in our_stats.items()]))
+print("Train stats: " + " ".join(["{0} {1}".format(key, round(value, ROUNDING)) for key, value in train_stats.items()]))
+print("Test stats: " + " ".join(["{0} {1}".format(key, round(value, ROUNDING)) for key, value in test_stats.items()]))
+print("Our stats: " + " ".join(["{0} {1}".format(key, round(value, ROUNDING)) for key, value in our_stats.items()]))
 print()
 
 print("Our predictions: " + str([np.argmax(x) for x in guess]))
