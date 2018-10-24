@@ -23,7 +23,7 @@ y_ours = np.array(ourdata_y)
 print("Our data loaded")
 
 # Hyperhyperparameters
-ACTIVATORS = ["elu", "relu", "selu", "softmax", "softsign", "tanh", "hard_sigmoid", "sigmoid", "exponential", "linear"]
+ACTIVATORS = ["elu", "relu", "selu", "softmax", "softsign", "tanh", "hard_sigmoid", "sigmoid", "linear"]
 OPTIMIZERS = ["sgd", "adamax", "adam", "nadam", "adadelta", "adagrad", "rmsprop"]
 
 # Hyperparameters
@@ -31,18 +31,18 @@ start_time = time.time()
 OPTIMIZER = "sgd"
 LEARNING_RATE = 0
 LOSS = "sparse_categorical_crossentropy"
-EPOCHS = 2
+EPOCHS = 512
 METRICS = ['accuracy']
 STOCH_BATCH = 256
 ROUNDING = 6
 
 # Layer definition
-LAYERS = "784-500-sigmoid-10-softmax"
+LAYERS = "784-500-tanh-dropout_0.2-10-softmax"
 """
 Each layer is separated by a dash.
 Pure number is a simple linear layer
-Within each layer string, a dot (.) separates function from parameters
-i.e. 'dropout.0.2' is 20% dropout
+Within each layer string, an underscore (_) separates function from parameters
+i.e. 'dropout_0.2' is 20% dropout
 """
 
 def is_int(num):
@@ -51,7 +51,13 @@ def is_int(num):
     except ValueError:
         return False
     return True
-
+def is_float(num):
+    try:
+        float(num)
+    except ValueError:
+        return False
+    return True
+    
 # Define model
 print("Building model")
 model = keras.models.Sequential()
@@ -71,24 +77,28 @@ for layer in layers_split:
     # General activation functions
     elif layer in ACTIVATORS:
         print("Activation function recognized with function=" + layer)
-        model.add(keras.layers.Activation(activation=layer))
+        if layer == "exponential":
+            model.add(keras.layers.Activation(activation=keras.activations.exponential))
+        else:
+            model.add(keras.layers.Activation(activation=layer))
 
     # Dropout layer
     elif "dropout" in layer:
-        dropout_split = layer.split(".")
-        if len(dropout_split) < 2 or not isinstance(dropout_split[1], float):
+        dropout_split = layer.split("_")
+        if len(dropout_split) < 2 or not is_float(dropout_split[1]):
             print("Dropout layer recognized but invalid rate; skipping")
             continue
-        if not 0 < dropout_split[1] < 1:
+        dropout = float(dropout_split[1])
+        if not 0 < dropout < 1:
             print("Dropout layer recognized but rate is not in range (0,1); skipping")
             continue
         print(("Dropout layer recognized with rate=" + dropout_split[1]))
-        model.add(keras.layers.Dropout(float(dropout_split[1])))
+        model.add(keras.layers.Dropout(float(dropout)))
 
     # L1 regularization
     elif "l1" in layer:
-        dropout_split = layer.split(".")
-        if len(dropout_split) < 2 or not isinstance(dropout_split[1], float):
+        dropout_split = layer.split("_")
+        if len(dropout_split) < 2 or not is_float(dropout_split[1]):
             print("L1 reg layer recognized but invalid factor; skipping")
             continue
         print("L1 reg layer reocognized with factor=" + dropout_split[1])
@@ -96,8 +106,8 @@ for layer in layers_split:
 
     # L2 regularization
     elif "l2" in layer:
-        dropout_split = layer.split(".")
-        if len(dropout_split) < 2 or not isinstance(dropout_split[1], float):
+        dropout_split = layer.split("_")
+        if len(dropout_split) < 2 or not is_float(dropout_split[1]):
             print("L2 reg layer recognized but invalid factor; skipping")
             continue
         print("L2 reg layer reocognized with factor=" + dropout_split[1])
@@ -109,7 +119,7 @@ for layer in layers_split:
 print("Model built")
 
 # Create and train model. Define custom evaluation
-print("Model fitting parameters: optimizer={0}, loss={1}".format(OPTIMIZER, LOSS))
+print("Model fitting parameters: optimizer={0}, loss={1}, lr={2}".format(OPTIMIZER, LOSS, LEARNING_RATE))
 model.compile(optimizer=OPTIMIZER,
               loss=LOSS,
               metrics=METRICS)
