@@ -25,19 +25,20 @@ print("Our data loaded")
 # Hyperhyperparameters
 ACTIVATORS = ["elu", "relu", "selu", "softmax", "softsign", "tanh", "hard_sigmoid", "sigmoid", "linear"]
 OPTIMIZERS = ["sgd", "adamax", "adam", "nadam", "adadelta", "adagrad", "rmsprop"]
+LOSSES = ["sparse_categorical_crossentropy"]
 
 # Hyperparameters
 start_time = time.time()
-OPTIMIZER = "sgd"
+OPTIMIZER = "adam"
 LEARNING_RATE = 0
-LOSS = "sparse_categorical_crossentropy"
+LOSS = "categorical_hinge"
 EPOCHS = 512
 METRICS = ['accuracy']
 STOCH_BATCH = 256
 ROUNDING = 6
 
 # Layer definition
-LAYERS = "784-500-tanh-dropout_0.2-10-softmax"
+LAYERS = "784-500-relu-dropout_0.2-10-softmax"
 """
 Each layer is separated by a dash.
 Pure number is a simple linear layer
