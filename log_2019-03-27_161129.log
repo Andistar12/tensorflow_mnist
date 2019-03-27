@@ -1,0 +1,36 @@
+[DEBUG] [main 2019-03-27 16:11:29,046] Logging setup for console and file
+[INFO] [main 2019-03-27 16:11:31,920] MNIST train and test data loaded
+[INFO] [main 2019-03-27 16:11:31,975] Personal data loaded
+[DEBUG] [main 2019-03-27 16:11:31,976] Reading in networks from directory ./networks
+[DEBUG] [main 2019-03-27 16:11:31,976] Found file to load: ./networkslinear_test.json
+[INFO] [main 2019-03-27 16:11:31,976] Reading in network from JSON file ./networks/linear_test.json
+[INFO] [main 2019-03-27 16:11:31,976] Networks loaded. Beginning training
+[INFO] [main 2019-03-27 16:11:31,977] Building network linear_test
+[INFO] [linear_test 2019-03-27 16:11:31,977] Creating model linear_test
+[DEBUG] [linear_test 2019-03-27 16:11:32,032] Flatten function recognized
+[DEBUG] [linear_test 2019-03-27 16:11:32,051] Dense layer recognized with hidden neurons=100
+[DEBUG] [linear_test 2019-03-27 16:11:32,066] Activation function recognized with function=sigmoid
+[DEBUG] [linear_test 2019-03-27 16:11:32,068] Dense layer recognized with hidden neurons=10
+[DEBUG] [linear_test 2019-03-27 16:11:32,081] Activation function recognized with function=softmax
+[DEBUG] [linear_test 2019-03-27 16:11:32,083] Model parameters: optimizer=sgd, loss=sparse_categorical_crossentropy, lr=0.5
+[WARNING] [tensorflow 2019-03-27 16:11:32,196] From /root/.local/share/virtualenvs/tensorflow_mnist-dt6t6lS-/lib/python3.6/site-packages/tensorflow/python/keras/_impl/keras/backend.py:1557: calling reduce_mean (from tensorflow.python.ops.math_ops) with keep_dims is deprecated and will be removed in a future version.
+Instructions for updating:
+keep_dims is deprecated, use keepdims instead
+[WARNING] [tensorflow 2019-03-27 16:11:32,208] From /root/.local/share/virtualenvs/tensorflow_mnist-dt6t6lS-/lib/python3.6/site-packages/tensorflow/python/keras/_impl/keras/backend.py:1422: calling reduce_max (from tensorflow.python.ops.math_ops) with keep_dims is deprecated and will be removed in a future version.
+Instructions for updating:
+keep_dims is deprecated, use keepdims instead
+[INFO] [linear_test 2019-03-27 16:11:32,216] Model linear_test finished creation
+[INFO] [main 2019-03-27 16:11:32,216] Training network linear_test
+[INFO] [linear_test 2019-03-27 16:11:32,216] Beginning training on model linear_test
+[INFO] [linear_test 2019-03-27 16:11:36,036] Finished training model in 3.818667411804199 seconds
+[INFO] [main 2019-03-27 16:11:36,039] Gathering statistics
+[INFO] [main 2019-03-27 16:11:42,059] ----------------------- TEST RESULTS ------------------------
+[INFO] [main 2019-03-27 16:11:42,060] Train stats: loss 1.78356 acc 0.698167
+[INFO] [main 2019-03-27 16:11:42,061] Test stats: loss 1.773731 acc 0.7103
+[INFO] [main 2019-03-27 16:11:42,061] Our stats: loss 1.788686 acc 0.5
+[INFO] [main 2019-03-27 16:11:42,061] Our predictions: [0, 1, 2, 0, 2, 0, 6, 2, 0, 9]
+[INFO] [main 2019-03-27 16:11:42,061] Writing train data to file for linear_test
+[INFO] [main 2019-03-27 16:11:42,063] Writing train data weights to file for linear_test
+[INFO] [linear_test 2019-03-27 16:11:42,102] Model weights saved to file ./networks/linear_test.h5
+[INFO] [main 2019-03-27 16:11:42,102] Wrote train data to file for network linear_test
+[INFO] [main 2019-03-27 16:11:42,103] All training finished. Quitting
