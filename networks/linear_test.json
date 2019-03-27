@@ -1,0 +1,26 @@
+{
+    "_comment": "This is a test file for linear nets, not intended for performance",
+    "name": "linear_test",
+    "layers": "flat-300-sigmoid-10-softmax",
+    "optimizer": "sgd",
+    "learning_rate": 0.5,
+    "loss": "sparse_categorical_crossentropy",
+    "input_shape": [
+        28,
+        28
+    ],
+    "train_data": {
+        "val_loss": [
+            1.6554553404450416
+        ],
+        "val_acc": [
+            0.7101000055670739
+        ],
+        "loss": [
+            1.9843593781193098
+        ],
+        "acc": [
+            0.5340166677720845
+        ]
+    }
+}

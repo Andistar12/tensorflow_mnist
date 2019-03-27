@@ -1,3 +1,5 @@
+# First neural network program, has basic skeleton of a network
+
 import tensorflow as tf
 import numpy as np
 import csv
