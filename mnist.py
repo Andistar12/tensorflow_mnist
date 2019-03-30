@@ -117,7 +117,7 @@ for net in networks:
     logger.info("Building network " + net.name)
     net.build()
     logger.info("Training network " + net.name)
-    history = net.train(X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, 1, 125)
+    history = net.train(X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, 5, 125)
 
     if history == None:
         logger.warn("No history generated. Skipping")

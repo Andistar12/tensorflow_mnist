@@ -1,9 +1,41 @@
 import time
-import sys
 import numpy as np
 import logging
-import traceback
+import json
 from tensorflow import keras
+
+# Load in networks
+# TODO account for metrics
+def gen_network(file, reject_trained=False):
+    logger = logging.getLogger("network-gen")
+    with open(file) as json_file:
+        logger.info("Reading in network from JSON file " + file)
+        data = json.load(json_file)
+        if reject_trained: # TODO find better solution?
+            if data.get("train_data", "") is not "":
+                logger.warn("Network already traineded. Skipping")
+                return None
+        name = data.get("name", "")
+        if name is "":
+            logger.warn("Network has no name. Skipping")
+            return None
+        layers = data.get("layers", "")
+        if layers is "":
+            logger.warn("Network has no layer data. Skipping")
+            return None
+        optimizer = data.get("optimizer", "")
+        if optimizer is "":
+            logger.warn("Network has no optimizer. Skipping")
+            return None
+        learning_rate = data.get("learning_rate", 0.0)
+        loss = data.get("loss", "")
+        if loss is "":
+            logger.warn("Network has no loss. Skipping")
+            return None
+        input_shape = tuple(data.get("input_shape", (0)))
+
+        return Network(name, layers, optimizer, learning_rate, loss, input_shape)
+        # def __init__(self, name, layers, optimizer, learning_rate, loss, input_shape, metrics = ["accuracy"])
 
 # Hyperhyperparameters
 ACTIVATORS = ["elu", "relu", "selu", "softmax", "softsign", "tanh", "hard_sigmoid", "sigmoid", "linear"]
@@ -140,8 +172,7 @@ class Network:
             self.model.compile(optimizer=self.optimizer, loss=self.loss, metrics=self.metrics)
             logger.info("Model " + self.name + " finished creation")
         except Exception as e:
-            logger.error("Error creating network: Invalid params?")
-            logger.error(traceback.format_exc())
+            logger.error("Error creating network: " + str(e))
             self.model = None
     
     def load_weights(self, file):
