@@ -1,0 +1,30 @@
+{
+    "log_prefix": "log",
+    "log_format": "[%(levelname)s] [%(name)s %(asctime)s] %(message)s",
+    "storage_dir": "./networks",
+
+    "rounding": 6,
+    "epochs": 10,
+    "epoch_update": 5,
+    "batch": 125,
+
+    "networks": [
+        {
+            "_comment": "Linear network",
+            "name": "100linear",
+            "layers": "flat-100-sigmoid-10-softmax",
+            "optimizer": "sgd",
+            "learning_rate": [0.5, 0.05],
+            "loss": "sparse_categorical_crossentropy",
+            "input_shape": [
+                28,
+                28
+            ]
+        }
+    ]
+}
+
+
+
+
+

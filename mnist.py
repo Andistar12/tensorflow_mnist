@@ -8,28 +8,40 @@ import json
 import os
 from tensorflow import keras
 from PIL import Image
-from network import Network
+from network import Network 
 
-# TODO add logging params in config file
+# Load config file
+try:
+    cfgfile = open("./config.json")
+    config = json.load(cfgfile)
+except Exception:
+    print("Error occurred opening config file config.json. Exiting")
+    sys.exit(1)
 
-# TODO move to config file?
-ROUNDING = 6
-NETWORKS_LOC = "./networks"
+# Get Hyperhyperparameters
+ROUNDING = int(config.get("rounding", 6))
+NETWORKS_LOC = config.get("storage_loc", "./networks")
+log_prefix = config.get("log_prefix", "")
+log_format = config.get("log_format", "[%(levelname)s] [%(name)s %(asctime)s] %(message)s")
+epochs = config.get("epochs", 0)
+epoch_update = config.get("epoch_update", 0)
+batch = config.get("batch", 0)
 
 # Debug-level logging to file, info-level logging to console
-logFormat = logging.Formatter('[%(levelname)s] [%(name)s %(asctime)s] %(message)s')
+logFormat = logging.Formatter(log_format)
 rootLogger = logging.getLogger()
 rootLogger.setLevel(logging.DEBUG)
 
-# Set up logging to file
-currdatetime = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H%M%S')
-log_file = "log_{0}.log".format(currdatetime)
-fileHandler = logging.FileHandler(filename=log_file, encoding='utf-8', mode='w')
-fileHandler.setLevel(logging.DEBUG)
-fileHandler.setFormatter(logFormat)
-rootLogger.addHandler(fileHandler)
+# Set up debug-level logging to file
+if log_prefix is not None:
+    currdatetime = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H%M%S')
+    log_file = "{0}_{1}.log".format(log_prefix, currdatetime)
+    fileHandler = logging.FileHandler(filename=log_file, encoding='utf-8', mode='w')
+    fileHandler.setLevel(logging.DEBUG)
+    fileHandler.setFormatter(logFormat)
+    rootLogger.addHandler(fileHandler)
 
-# Set up logging to console
+# Set up info-level logging to console
 consoleHandler = logging.StreamHandler(sys.stdout)
 consoleHandler.setLevel(logging.INFO)
 consoleHandler.setFormatter(logFormat)
@@ -38,7 +50,7 @@ rootLogger.addHandler(consoleHandler)
 logger = logging.getLogger("main")
 logger.debug("Logging setup for console and file")
 
-# Load in MNIST data
+# Load in MNIST train and test data
 (X_TRAIN, Y_TRAIN), (X_TEST, Y_TEST) = keras.datasets.mnist.load_data()
 X_TRAIN = X_TRAIN.astype("float32") / 255.0
 X_TEST = X_TEST.astype("float32") / 255.0
@@ -48,62 +60,58 @@ logger.info("MNIST train and test data loaded")
 X_OURS = []
 Y_OURS = []
 for image_index in range(10):
-    image = Image.open("images/" + str(image_index) + ".jpg").convert('L')
+    image = Image.open("images/" + str(image_index) + ".jpg").convert("L")
     array = np.array(image)
-    array = 1 - np.resize(array, ([28, 28]))
+    array = 1 - np.resize(array, ([28,28]))
     X_OURS.append(array)
     Y_OURS.append(image_index)
 X_OURS = np.array(X_OURS)
 Y_OURS = np.array(Y_OURS)
-logger.info("Personal data loaded")
+logger.info("Our data loaded")
 
 # Load in networks
-# TODO account for metrics
-def gen_network(file):
-    with open(file) as json_file:
-        logger.info("Reading in network from JSON file " + file)
-        data = json.load(json_file)
-        if data.get("train_data", "") is not "":
-            logger.warn("Network already traineded. Skipping")
-            return None
-        name = data.get("name", "")
+networks = list()
+networks_data = config.get("networks", list())
+if len(networks_data) > 0:
+    logger.debug("Found {0} network entries to scan in".format(len(networks_data)))
+    for entry in networks_data:
+
+        # Verify all data is valid
+        name = entry.get("name", "")
         if name is "":
             logger.warn("Network has no name. Skipping")
-            return None
-        layers = data.get("layers", "")
+            continue
+        layers = entry.get("layers", "")
         if layers is "":
             logger.warn("Network has no layer data. Skipping")
-            return None
-        optimizer = data.get("optimizer", "")
+            continue
+        optimizer = entry.get("optimizer", "")
         if optimizer is "":
             logger.warn("Network has no optimizer. Skipping")
-            return None
-        learning_rate = data.get("learning_rate", 0.0)
-        loss = data.get("loss", "")
+            continue
+        learning_rate = entry.get("learning_rate", 0.0)
+        loss = entry.get("loss", "")
         if loss is "":
             logger.warn("Network has no loss. Skipping")
-            return None
-        input_shape = tuple(data.get("input_shape", (0)))
+            continue
+        input_shape = tuple(entry.get("input_shape", (0))) # TODO cleanup
+        metrics = entry.get("metrics", ["accuracy"])
 
-        return Network(name, layers, optimizer, learning_rate, loss, input_shape)
-        # def __init__(self, name, layers, optimizer, learning_rate, loss, input_shape, metrics = ["accuracy"]):
+        # Create lists of what can vary
+        if isinstance(optimizer, str):
+            optimizer = [optimizer]
+        if isinstance(learning_rate, float):
+            learning_rate = [learning_rate]
+        if isinstance(loss, str):
+            loss = [loss]
 
-# Create test networks
-# network1 = Network("network1", "flat-100-relu-10-softmax", "adam", 0, "sparse_categorical_crossentropy", (28,28,))
-#network2 = Network("network2", "flat-100-relu-10-softmax", "sgd", 0, "sparse_categorical_crossentropy", (28,28,))
-# network3 = Network("network3", "reshape_28_28_1-conv2d_32_5_1-maxpool_2-flatten-512-relu-10-softmax", "adam", 0, "sparse_categorical_crossentropy", (28,28,))
-# networks = [network3]
+        for op in optimizer:
+            for lr in learning_rate:
+                for l in loss:
+                    network_name = "{0}-op={1},lr={2},ls={3}".format(name, op, lr, l)
+                    networks.append(Network(network_name, layers, op, lr, l, input_shape, metrics=metrics, log_name=name))
 
-logger.debug("Reading in networks from directory " + NETWORKS_LOC)
-networks = list()
-for file in os.listdir(NETWORKS_LOC):
-    if file.endswith(".json"):
-        logger.debug("Found file to load: " + NETWORKS_LOC + file)
-        network = gen_network(os.path.join(NETWORKS_LOC, file))
-        if network is not None:
-            networks.append(network)
-
-logger.info("Networks loaded. Beginning training")
+logger.info("Networks loaded. Beginning training of {0} networks".format(len(networks)))
 
 """
 Each layer is separated by a dash.
@@ -117,7 +125,7 @@ for net in networks:
     logger.info("Building network " + net.name)
     net.build()
     logger.info("Training network " + net.name)
-    history = net.train(X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, 5, 125)
+    history = net.train(X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, epochs, batch, epoch_update=epoch_update, storage_loc=NETWORKS_LOC)
 
     if history == None:
         logger.warn("No history generated. Skipping")
@@ -140,16 +148,4 @@ for net in networks:
     logger.info("Our stats: " + " ".join(our_stats))
     logger.info("Our predictions: " + str([np.argmax(x) for x in guess]))
 
-    # Write train and weight data to file
-    logger.info("Writing train data to file for " + net.name)
-    filename = os.path.join(NETWORKS_LOC, net.name + ".json")
-    with open(filename, "r") as json_file:
-        data = json.load(json_file)
-    data["train_data"] = history
-    with open(filename, "w") as json_file:
-        json.dump(data, json_file, indent=4)
-    logger.info("Writing train data weights to file for " + net.name)
-    filename = os.path.join(NETWORKS_LOC, net.name + ".h5")
-    net.save_weights(filename)
-    logger.info("Wrote train data to file for network " + net.name)
 logger.info("All training finished. Quitting")

@@ -4,39 +4,6 @@ import logging
 import json
 from tensorflow import keras
 
-# Load in networks
-# TODO account for metrics
-def gen_network(file, reject_trained=False):
-    logger = logging.getLogger("network-gen")
-    with open(file) as json_file:
-        logger.info("Reading in network from JSON file " + file)
-        data = json.load(json_file)
-        if reject_trained: # TODO find better solution?
-            if data.get("train_data", "") is not "":
-                logger.warn("Network already traineded. Skipping")
-                return None
-        name = data.get("name", "")
-        if name is "":
-            logger.warn("Network has no name. Skipping")
-            return None
-        layers = data.get("layers", "")
-        if layers is "":
-            logger.warn("Network has no layer data. Skipping")
-            return None
-        optimizer = data.get("optimizer", "")
-        if optimizer is "":
-            logger.warn("Network has no optimizer. Skipping")
-            return None
-        learning_rate = data.get("learning_rate", 0.0)
-        loss = data.get("loss", "")
-        if loss is "":
-            logger.warn("Network has no loss. Skipping")
-            return None
-        input_shape = tuple(data.get("input_shape", (0)))
-
-        return Network(name, layers, optimizer, learning_rate, loss, input_shape)
-        # def __init__(self, name, layers, optimizer, learning_rate, loss, input_shape, metrics = ["accuracy"])
-
 # Hyperhyperparameters
 ACTIVATORS = ["elu", "relu", "selu", "softmax", "softsign", "tanh", "hard_sigmoid", "sigmoid", "linear"]
 OPTIMIZERS = ["sgd", "adamax", "adam", "nadam", "adadelta", "adagrad", "rmsprop"]
@@ -59,16 +26,18 @@ def is_float(num):
 # The general network class
 class Network:
 
-    def __init__(self, name, layers, optimizer, learning_rate, loss, input_shape, metrics = ["accuracy"]):
+    def __init__(self, name, layers, optimizer, learning_rate, loss, input_shape, metrics = ["accuracy"], log_name=None):
         # Save vars
-        self.logger = logging.getLogger(name)
+        if log_name is None:
+            log_name = name
+        self.logger = logging.getLogger(log_name)
         self.name = name # String of given name of network
         self.layers = layers # String of custom layer definition
         self.optimizer = optimizer # String of function name
         self.loss = loss # String of fnction name
         self.learning_rate = learning_rate # Float of learning rate
         self.metrics = metrics # Array of strings of tf.metrics
-        self.input_shape = input_shape
+        self.input_shape = input_shape # Tuple of shape of input
         self.model = None
     
     def build(self):
@@ -181,24 +150,39 @@ class Network:
             return
         self.model.load_weights(file)
         self.logger.info("Model weights loaded from file " + file)
-        
-    def save_weights(self, file):
-        if self.model is None:
-            self.logger.debug("No model to save weights from")
-            return
-        self.model.save_weights(file)
-        self.logger.info("Model weights saved to file " + file)
 
-    def train(self, train_x, train_y, test_x, test_y, epochs, stoch_batch):
+    def train(self, train_x, train_y, test_x, test_y, epochs, stoch_batch, epoch_update=5, storage_loc=None):
         if self.model == None:
             return None
+        
+        callbacks = list()
+        if storage_loc is not None:
+            file_loc = storage_loc
+            if not file_loc.endswith("/"):
+                file_loc += "/"
+            checkpoint = keras.callbacks.ModelCheckpoint(
+                    file_loc + self.name + ".h5", 
+                    monitor="val_loss", 
+                    save_best_only=True, 
+                    save_weights_only=True,
+                    mode="auto",
+                    period=epoch_update)
+            tb = keras.callbacks.TensorBoard(
+                    log_dir=storage_loc,
+                    histogram_freq=epoch_update,
+                    update_freq=epoch_update)
+            callbacks.append(checkpoint)
+            callbacks.append(tb)
+
+            # keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=0, batch_size=32, write_graph=True, write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None, embeddings_data=None, update_freq='epoch')
 
         self.logger.info("Beginning training on model " + self.name)
         train_time = time.time()
 
         history = self.model.fit(train_x, train_y, 
             epochs=epochs, batch_size=stoch_batch,
-            validation_data=(test_x, test_y))
+            validation_data=(test_x, test_y),
+            callbacks=callbacks)
 
         train_time = time.time() - train_time # Seconds
         self.logger.info("Finished training model in " + str(train_time) + " seconds")
