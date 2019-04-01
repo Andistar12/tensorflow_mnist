@@ -1,0 +1,200 @@
+[DEBUG] [main 2019-03-31 21:00:58,070] Logging setup for console and file
+[INFO] [main 2019-03-31 21:00:58,419] MNIST train and test data loaded
+[INFO] [main 2019-03-31 21:00:58,427] Our data loaded
+[DEBUG] [main 2019-03-31 21:00:58,427] Found 2 network entries to scan in
+[INFO] [main 2019-03-31 21:00:58,427] Networks loaded. Beginning training of 8 networks
+[INFO] [main 2019-03-31 21:00:58,427] Building network linear300-op=adam,lr=0.01,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:00:58,427] Creating model linear300-op=adam,lr=0.01,ls=categorical_crossentropy
+[DEBUG] [linear300 2019-03-31 21:00:58,438] Flatten function recognized
+[DEBUG] [linear300 2019-03-31 21:00:58,444] Dense layer recognized with hidden neurons=100
+[WARNING] [tensorflow 2019-03-31 21:00:58,450] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/resource_variable_ops.py:435: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
+[DEBUG] [linear300 2019-03-31 21:00:58,457] Activation function recognized with function=sigmoid
+[DEBUG] [linear300 2019-03-31 21:00:58,458] Dense layer recognized with hidden neurons=10
+[DEBUG] [linear300 2019-03-31 21:00:58,470] Activation function recognized with function=softmax
+[DEBUG] [linear300 2019-03-31 21:00:58,471] Model parameters: optimizer=adam, loss=categorical_crossentropy, lr=0.01
+[INFO] [linear300 2019-03-31 21:00:58,557] Model linear300-op=adam,lr=0.01,ls=categorical_crossentropy finished creation
+[INFO] [main 2019-03-31 21:00:59,700] Training network linear300-op=adam,lr=0.01,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:00:59,700] Beginning training on model linear300-op=adam,lr=0.01,ls=categorical_crossentropy
+[WARNING] [tensorflow 2019-03-31 21:00:59,737] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.cast instead.
+[WARNING] [tensorflow 2019-03-31 21:01:17,952] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adam object at 0x7fba7cbb0cf8>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:01:18,009] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/keras/engine/network.py:1436: update_checkpoint_state (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.train.CheckpointManager to manage checkpoints rather than manually editing the Checkpoint proto.
+[WARNING] [tensorflow 2019-03-31 21:01:35,856] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adam object at 0x7fba7cbb0cf8>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:01:52,076] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adam object at 0x7fba7cbb0cf8>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[INFO] [linear300 2019-03-31 21:20:16,084] Finished training model in 1156.3836588859558 seconds
+[INFO] [main 2019-03-31 21:20:16,084] Gathering statistics
+[INFO] [main 2019-03-31 21:20:23,497] ----------------------- TEST RESULTS ------------------------
+[INFO] [main 2019-03-31 21:20:23,497] Train stats: loss 0.0 acc 1.0
+[INFO] [main 2019-03-31 21:20:23,498] Test stats: loss 0.176142 acc 0.9782
+[INFO] [main 2019-03-31 21:20:23,498] Our stats: loss 0.614858 acc 0.8
+[INFO] [main 2019-03-31 21:20:23,498] Our predictions: [0, 1, 2, 3, 4, 9, 6, 3, 8, 9]
+[INFO] [main 2019-03-31 21:20:23,499] Building network linear300-op=adam,lr=0.005,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:20:23,500] Creating model linear300-op=adam,lr=0.005,ls=categorical_crossentropy
+[DEBUG] [linear300 2019-03-31 21:20:23,501] Flatten function recognized
+[DEBUG] [linear300 2019-03-31 21:20:23,509] Dense layer recognized with hidden neurons=100
+[DEBUG] [linear300 2019-03-31 21:20:23,523] Activation function recognized with function=sigmoid
+[DEBUG] [linear300 2019-03-31 21:20:23,524] Dense layer recognized with hidden neurons=10
+[DEBUG] [linear300 2019-03-31 21:20:23,537] Activation function recognized with function=softmax
+[DEBUG] [linear300 2019-03-31 21:20:23,538] Model parameters: optimizer=adam, loss=categorical_crossentropy, lr=0.005
+[INFO] [linear300 2019-03-31 21:20:23,635] Model linear300-op=adam,lr=0.005,ls=categorical_crossentropy finished creation
+[INFO] [main 2019-03-31 21:20:23,753] Training network linear300-op=adam,lr=0.005,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:20:23,753] Beginning training on model linear300-op=adam,lr=0.005,ls=categorical_crossentropy
+[WARNING] [tensorflow 2019-03-31 21:21:33,522] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adam object at 0x7fba7b6c2ac8>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:22:39,038] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adam object at 0x7fba7b6c2ac8>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:23:39,341] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adam object at 0x7fba7b6c2ac8>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[INFO] [linear300 2019-03-31 21:41:39,741] Finished training model in 1275.9878995418549 seconds
+[INFO] [main 2019-03-31 21:41:39,742] Gathering statistics
+[INFO] [main 2019-03-31 21:41:43,061] ----------------------- TEST RESULTS ------------------------
+[INFO] [main 2019-03-31 21:41:43,062] Train stats: loss 0.0 acc 1.0
+[INFO] [main 2019-03-31 21:41:43,062] Test stats: loss 0.172988 acc 0.9777
+[INFO] [main 2019-03-31 21:41:43,062] Our stats: loss 0.234016 acc 0.9
+[INFO] [main 2019-03-31 21:41:43,062] Our predictions: [0, 1, 2, 7, 4, 5, 6, 7, 8, 9]
+[INFO] [main 2019-03-31 21:41:43,064] Building network linear300-op=adamax,lr=0.01,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:41:43,064] Creating model linear300-op=adamax,lr=0.01,ls=categorical_crossentropy
+[DEBUG] [linear300 2019-03-31 21:41:43,066] Flatten function recognized
+[DEBUG] [linear300 2019-03-31 21:41:43,072] Dense layer recognized with hidden neurons=100
+[DEBUG] [linear300 2019-03-31 21:41:43,087] Activation function recognized with function=sigmoid
+[DEBUG] [linear300 2019-03-31 21:41:43,088] Dense layer recognized with hidden neurons=10
+[DEBUG] [linear300 2019-03-31 21:41:43,102] Activation function recognized with function=softmax
+[DEBUG] [linear300 2019-03-31 21:41:43,103] Model parameters: optimizer=adamax, loss=categorical_crossentropy, lr=0.01
+[INFO] [linear300 2019-03-31 21:41:43,196] Model linear300-op=adamax,lr=0.01,ls=categorical_crossentropy finished creation
+[INFO] [main 2019-03-31 21:41:43,231] Training network linear300-op=adamax,lr=0.01,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:41:43,231] Beginning training on model linear300-op=adamax,lr=0.01,ls=categorical_crossentropy
+[WARNING] [tensorflow 2019-03-31 21:42:01,638] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba6870c9b0>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:42:19,481] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba6870c9b0>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:42:37,689] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba6870c9b0>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:42:56,438] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba6870c9b0>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:43:15,114] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba6870c9b0>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:43:34,012] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba6870c9b0>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:43:52,944] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba6870c9b0>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[INFO] [linear300 2019-03-31 21:51:06,049] Finished training model in 562.8179392814636 seconds
+[INFO] [main 2019-03-31 21:51:06,049] Gathering statistics
+[INFO] [main 2019-03-31 21:51:09,563] ----------------------- TEST RESULTS ------------------------
+[INFO] [main 2019-03-31 21:51:09,563] Train stats: loss 0.0 acc 1.0
+[INFO] [main 2019-03-31 21:51:09,563] Test stats: loss 0.155348 acc 0.9777
+[INFO] [main 2019-03-31 21:51:09,563] Our stats: loss 0.059526 acc 1.0
+[INFO] [main 2019-03-31 21:51:09,563] Our predictions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[INFO] [main 2019-03-31 21:51:09,566] Building network linear300-op=adamax,lr=0.005,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:51:09,566] Creating model linear300-op=adamax,lr=0.005,ls=categorical_crossentropy
+[DEBUG] [linear300 2019-03-31 21:51:09,568] Flatten function recognized
+[DEBUG] [linear300 2019-03-31 21:51:09,574] Dense layer recognized with hidden neurons=100
+[DEBUG] [linear300 2019-03-31 21:51:09,590] Activation function recognized with function=sigmoid
+[DEBUG] [linear300 2019-03-31 21:51:09,591] Dense layer recognized with hidden neurons=10
+[DEBUG] [linear300 2019-03-31 21:51:09,607] Activation function recognized with function=softmax
+[DEBUG] [linear300 2019-03-31 21:51:09,608] Model parameters: optimizer=adamax, loss=categorical_crossentropy, lr=0.005
+[INFO] [linear300 2019-03-31 21:51:09,700] Model linear300-op=adamax,lr=0.005,ls=categorical_crossentropy finished creation
+[INFO] [main 2019-03-31 21:51:09,735] Training network linear300-op=adamax,lr=0.005,ls=categorical_crossentropy
+[INFO] [linear300 2019-03-31 21:51:09,735] Beginning training on model linear300-op=adamax,lr=0.005,ls=categorical_crossentropy
+[WARNING] [tensorflow 2019-03-31 21:51:28,959] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba683ca390>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:51:47,799] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba683ca390>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:52:06,739] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba683ca390>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:52:25,422] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba683ca390>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:52:44,360] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba683ca390>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[WARNING] [tensorflow 2019-03-31 21:53:03,201] This model was compiled with a Keras optimizer (<tensorflow.python.keras.optimizers.Adamax object at 0x7fba683ca390>) but is being saved in TensorFlow format with `save_weights`. The model's weights will be saved, but unlike with TensorFlow optimizers in the TensorFlow format the optimizer's state will not be saved.
+
+Consider using a TensorFlow optimizer from `tf.train`.
+[INFO] [linear300 2019-03-31 22:00:34,520] Finished training model in 564.785343170166 seconds
+[INFO] [main 2019-03-31 22:00:34,520] Gathering statistics
+[INFO] [main 2019-03-31 22:00:38,047] ----------------------- TEST RESULTS ------------------------
+[INFO] [main 2019-03-31 22:00:38,047] Train stats: loss 0.0 acc 1.0
+[INFO] [main 2019-03-31 22:00:38,047] Test stats: loss 0.164321 acc 0.9766
+[INFO] [main 2019-03-31 22:00:38,047] Our stats: loss 0.684866 acc 0.8
+[INFO] [main 2019-03-31 22:00:38,048] Our predictions: [0, 1, 2, 3, 4, 9, 6, 7, 8, 8]
+[INFO] [main 2019-03-31 22:00:38,050] Building network conv-1fc-op=adam,lr=0.01,ls=categorical_crossentropy:
+[INFO] [conv-1fc 2019-03-31 22:00:38,050] Creating model conv-1fc-op=adam,lr=0.01,ls=categorical_crossentropy:
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,052] Reshape layer recognized with shape=(28, 28, 1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,059] Conv3D layer recognized with features=64 kernel=(5,5) strides=(1,1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,080] MaxPool layer recognized with rate=2
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,081] Flatten function recognized
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,087] Dense layer recognized with hidden neurons=256
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,102] Activation function recognized with function=relu
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,103] Dense layer recognized with hidden neurons=10
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,118] Activation function recognized with function=softmax
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,119] Model parameters: optimizer=adam, loss=categorical_crossentropy:, lr=0.01
+[ERROR] [conv-1fc 2019-03-31 22:00:38,136] Error creating network: Unknown loss function:categorical_crossentropy:
+[INFO] [main 2019-03-31 22:00:38,169] Training network conv-1fc-op=adam,lr=0.01,ls=categorical_crossentropy:
+[WARNING] [main 2019-03-31 22:00:38,169] No history generated. Skipping
+[INFO] [main 2019-03-31 22:00:38,169] Building network conv-1fc-op=adam,lr=0.005,ls=categorical_crossentropy:
+[INFO] [conv-1fc 2019-03-31 22:00:38,169] Creating model conv-1fc-op=adam,lr=0.005,ls=categorical_crossentropy:
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,170] Reshape layer recognized with shape=(28, 28, 1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,176] Conv3D layer recognized with features=64 kernel=(5,5) strides=(1,1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,190] MaxPool layer recognized with rate=2
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,191] Flatten function recognized
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,196] Dense layer recognized with hidden neurons=256
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,209] Activation function recognized with function=relu
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,210] Dense layer recognized with hidden neurons=10
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,224] Activation function recognized with function=softmax
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,225] Model parameters: optimizer=adam, loss=categorical_crossentropy:, lr=0.005
+[ERROR] [conv-1fc 2019-03-31 22:00:38,290] Error creating network: Unknown loss function:categorical_crossentropy:
+[INFO] [main 2019-03-31 22:00:38,335] Training network conv-1fc-op=adam,lr=0.005,ls=categorical_crossentropy:
+[WARNING] [main 2019-03-31 22:00:38,335] No history generated. Skipping
+[INFO] [main 2019-03-31 22:00:38,335] Building network conv-1fc-op=adamax,lr=0.01,ls=categorical_crossentropy:
+[INFO] [conv-1fc 2019-03-31 22:00:38,335] Creating model conv-1fc-op=adamax,lr=0.01,ls=categorical_crossentropy:
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,336] Reshape layer recognized with shape=(28, 28, 1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,342] Conv3D layer recognized with features=64 kernel=(5,5) strides=(1,1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,357] MaxPool layer recognized with rate=2
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,358] Flatten function recognized
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,363] Dense layer recognized with hidden neurons=256
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,376] Activation function recognized with function=relu
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,377] Dense layer recognized with hidden neurons=10
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,390] Activation function recognized with function=softmax
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,391] Model parameters: optimizer=adamax, loss=categorical_crossentropy:, lr=0.01
+[ERROR] [conv-1fc 2019-03-31 22:00:38,407] Error creating network: Unknown loss function:categorical_crossentropy:
+[INFO] [main 2019-03-31 22:00:38,448] Training network conv-1fc-op=adamax,lr=0.01,ls=categorical_crossentropy:
+[WARNING] [main 2019-03-31 22:00:38,448] No history generated. Skipping
+[INFO] [main 2019-03-31 22:00:38,448] Building network conv-1fc-op=adamax,lr=0.005,ls=categorical_crossentropy:
+[INFO] [conv-1fc 2019-03-31 22:00:38,448] Creating model conv-1fc-op=adamax,lr=0.005,ls=categorical_crossentropy:
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,449] Reshape layer recognized with shape=(28, 28, 1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,455] Conv3D layer recognized with features=64 kernel=(5,5) strides=(1,1)
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,470] MaxPool layer recognized with rate=2
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,471] Flatten function recognized
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,475] Dense layer recognized with hidden neurons=256
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,489] Activation function recognized with function=relu
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,490] Dense layer recognized with hidden neurons=10
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,503] Activation function recognized with function=softmax
+[DEBUG] [conv-1fc 2019-03-31 22:00:38,504] Model parameters: optimizer=adamax, loss=categorical_crossentropy:, lr=0.005
+[ERROR] [conv-1fc 2019-03-31 22:00:38,521] Error creating network: Unknown loss function:categorical_crossentropy:
+[INFO] [main 2019-03-31 22:00:38,573] Training network conv-1fc-op=adamax,lr=0.005,ls=categorical_crossentropy:
+[WARNING] [main 2019-03-31 22:00:38,573] No history generated. Skipping
+[INFO] [main 2019-03-31 22:00:38,573] All training finished. Quitting

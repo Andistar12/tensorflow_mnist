@@ -1,0 +1,2 @@
+model_checkpoint_path: "linear300-op=adamax,lr=0.005,ls=categorical_crossentropy.hdf5-60"
+all_model_checkpoint_paths: "linear300-op=adamax,lr=0.005,ls=categorical_crossentropy.hdf5-60"

@@ -4,22 +4,26 @@
     "storage_dir": "./networks",
 
     "rounding": 6,
-    "epochs": 10,
-    "epoch_update": 5,
+    "epochs": 300,
+    "epoch_update": 10,
     "batch": 125,
 
     "networks": [
         {
-            "_comment": "Linear network",
-            "name": "100linear",
+            "name": "linear300",
             "layers": "flat-100-sigmoid-10-softmax",
-            "optimizer": "sgd",
-            "learning_rate": [0.5, 0.05],
-            "loss": "sparse_categorical_crossentropy",
-            "input_shape": [
-                28,
-                28
-            ]
+            "optimizer": ["adam", "adamax"],
+            "learning_rate": [0.01, 0.005],
+            "loss": "categorical_crossentropy",
+            "input_shape": [28, 28]
+        },
+        {
+            "name": "conv-1fc",
+            "layers": "reshape_28_28_1-conv2d_64_5_1-maxpool_2-flatten-256-relu-10-softmax",
+            "optimizer": ["adam", "adamax"],
+            "learning_rate": [0.01, 0.005],
+            "loss": "categorical_crossentropy",
+            "input_shape": [28, 28]
         }
     ]
 }
