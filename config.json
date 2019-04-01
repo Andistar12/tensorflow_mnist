@@ -4,8 +4,8 @@
     "storage_dir": "./networks",
 
     "rounding": 6,
-    "epochs": 300,
-    "epoch_update": 10,
+    "epochs": 2,
+    "epoch_update": 1,
     "batch": 125,
 
     "networks": [

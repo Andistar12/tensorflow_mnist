@@ -52,8 +52,8 @@ logger.debug("Logging setup for console and file")
 
 # Load in MNIST train and test data
 (X_TRAIN, Y_TRAIN), (X_TEST, Y_TEST) = keras.datasets.mnist.load_data()
-X_TRAIN = X_TRAIN.astype("float32") / 255.0
-X_TEST = X_TEST.astype("float32") / 255.0
+X_TRAIN = X_TRAIN.astype("float32")
+X_TEST = X_TEST.astype("float32")
 logger.info("MNIST train and test data loaded")
 Y_TRAIN = keras.utils.to_categorical(Y_TRAIN, 10)
 Y_TEST = keras.utils.to_categorical(Y_TEST, 10)
@@ -64,10 +64,10 @@ Y_OURS = []
 for image_index in range(10):
     image = Image.open("images/" + str(image_index) + ".jpg").convert("L")
     array = np.array(image)
-    array = 1 - np.resize(array, ([28,28]))
+    array = 1 - np.resize(array, (28,28))
     X_OURS.append(array)
     Y_OURS.append(image_index)
-X_OURS = np.array(X_OURS).astype("float32") / 255.0
+X_OURS = np.array(X_OURS).astype("float32")
 Y_OURS = np.array(Y_OURS)
 Y_OURS = keras.utils.to_categorical(Y_OURS, 10)
 logger.info("Our data loaded")
@@ -145,7 +145,7 @@ for net in networks:
             # https://github.com/tensorflow/tensorboard/issues/2074
             # embeddings_freq=1,
             # embeddings_data=X_OURS,
-            # embeddings_layer_names=net.layer_list,
+            # embeddings_layer_names=None,
             # embeddings_metadata="/images/metadata.tsv",
 
             update_freq="epoch")

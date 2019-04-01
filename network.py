@@ -97,6 +97,22 @@ class Network:
                     prev_layer = keras.layers.Reshape(shape, name=name)(prev_layer)
                     layer_list.append(name)
 
+                # Embedded layer
+                elif "embed" in layer:
+                    embed_split = layer.split("_")
+                    if len(embed_split) < 3 or not is_int(embed_split[1]) or not is_int(embed_split[2]):
+                        logger.warn("Embedding layer recognized but invalid params; skipping")
+                        continue
+                    vocab_size = int(embed_split[1])
+                    neurons = int(embed_split[2])
+                    if vocab_size < 1 or neurons < 1:
+                        logger.warn("Embedding layer recognized but params are < 1; skipping")
+                        continue
+                    logger.debug("Embedding layer recognized with vocab={0} neurons={1}".format(vocab_size, neurons))
+                    name = self.log_name + "_embed_" + str(len(layer_list))
+                    prev_layer = keras.layers.Embedding(vocab_size, neurons, input_length=self.input_shape[0])(prev_layer)
+                    layer_list.append(name)
+
                 # Convoluted layer
                 elif "conv2d" in layer:
                     conv_split = layer.split("_")
@@ -109,7 +125,7 @@ class Network:
                     if feature_maps < 1 or kernel_size < 1 or stride_length < 1:
                         logger.warn("Conv2D layer recognized but params are < 1; skipping")
                         continue
-                    logger.debug("Conv3D layer recognized with features={0} kernel=({1},{1}) strides=({2},{2})".format(feature_maps, kernel_size, stride_length))
+                    logger.debug("Conv2D layer recognized with features={0} kernel=({1},{1}) strides=({2},{2})".format(feature_maps, kernel_size, stride_length))
                     name = self.log_name + "_conv2d_" + str(len(layer_list))
                     prev_layer = keras.layers.Conv2D(filters=feature_maps, kernel_size=kernel_size, strides=stride_length, name=name)(prev_layer) 
                     layer_list.append(name)
