@@ -3,6 +3,7 @@ import numpy as np
 import logging
 import json
 from tensorflow import keras
+from tensorflow.keras import backend as K
 
 # LOL GOTTA WAIT FOR TF 1.14 TO FIX THIS
 # https://github.com/tensorflow/tensorboard/issues/1666
@@ -71,30 +72,34 @@ class Network:
                         logger.warn("Dense layer recognized but neurons is < 0. Skipping")
                         continue
                     logger.debug("Dense layer recognized with hidden neurons=" + layer)
-                    name = self.log_name + "_dense_" + str(len(layer_list))
-                    prev_layer = keras.layers.Dense(neurons, name=name)(prev_layer)
+                    name = "dense_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.Dense(neurons, name=name)(prev_layer)
                     layer_list.append(name)
                 
                 # General activation functions
                 elif layer in ACTIVATORS:
                     logger.debug("Activation function recognized with function=" + layer)
-                    name = self.log_name + "_actiavtor_" + str(len(layer_list))
-                    prev_layer = keras.layers.Activation(activation=layer, name=name)(prev_layer)
+                    name = "{0}_{1}_{2}".format(layer, len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.Activation(activation=layer, name=name)(prev_layer)
                     layer_list.append(name)
 
                 # Flatten layer
                 elif "flat" in layer:
                     logger.debug("Flatten function recognized")
-                    name = self.log_name + "_flat_" + str(len(layer_list))
-                    prev_layer = keras.layers.Flatten(name=name)(prev_layer)
+                    name = "flatten_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.Flatten(name=name)(prev_layer)
                     layer_list.append(name)
 
                 elif "reshape" in layer:
                     conv_split = layer.split("_")
                     shape = tuple([int(x) for x in conv_split[1:]])
                     logger.debug("Reshape layer recognized with shape=" + str(shape))
-                    name = self.log_name + "_reshape_" + str(len(layer_list))
-                    prev_layer = keras.layers.Reshape(shape, name=name)(prev_layer)
+                    name = "reshape_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.Reshape(shape, name=name)(prev_layer)
                     layer_list.append(name)
 
                 # Embedded layer
@@ -109,8 +114,9 @@ class Network:
                         logger.warn("Embedding layer recognized but params are < 1; skipping")
                         continue
                     logger.debug("Embedding layer recognized with vocab={0} neurons={1}".format(vocab_size, neurons))
-                    name = self.log_name + "_embed_" + str(len(layer_list))
-                    prev_layer = keras.layers.Embedding(vocab_size, neurons, input_length=self.input_shape[0])(prev_layer)
+                    name = "embed_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.Embedding(vocab_size, neurons, input_length=self.input_shape[0])(prev_layer)
                     layer_list.append(name)
 
                 # Convoluted layer
@@ -126,8 +132,9 @@ class Network:
                         logger.warn("Conv2D layer recognized but params are < 1; skipping")
                         continue
                     logger.debug("Conv2D layer recognized with features={0} kernel=({1},{1}) strides=({2},{2})".format(feature_maps, kernel_size, stride_length))
-                    name = self.log_name + "_conv2d_" + str(len(layer_list))
-                    prev_layer = keras.layers.Conv2D(filters=feature_maps, kernel_size=kernel_size, strides=stride_length, name=name)(prev_layer) 
+                    name = "conv2d_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.Conv2D(filters=feature_maps, kernel_size=kernel_size, strides=stride_length, name=name)(prev_layer) 
                     layer_list.append(name)
 
                 # Max pooling 2d
@@ -141,8 +148,9 @@ class Network:
                         logger.warn("MaxPool layer recognized but rate is < 1; skipping")
                         continue
                     logger.debug(("MaxPool layer recognized with rate=" + maxpool_split[1]))
-                    name = self.log_name + "_maxpool_" + str(len(layer_list))
-                    prev_layer = keras.layers.MaxPool2D(pool, name=name)(prev_layer)
+                    name = "maxpool_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.MaxPool2D(pool, name=name)(prev_layer)
                     layer_list.append(name)
 
                 # Dropout layer
@@ -156,8 +164,9 @@ class Network:
                         logger.warn("Dropout layer recognized but rate is not in range (0,1); skipping")
                         continue
                     logger.debug(("Dropout layer recognized with rate=" + dropout_split[1]))
-                    name = self.log_name + "_dropout_" + str(len(layer_list))
-                    prev_layer = keras.layers.Dropout(dropout, name=name)(prev_layer)
+                    name = "dropout_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.Dropout(dropout, name=name)(prev_layer)
                     layer_list.append(name)
 
                 # L1 regularization
@@ -167,8 +176,9 @@ class Network:
                         logger.warn("L1 reg layer recognized but invalid factor; skipping")
                         continue
                     logger.debug("L1 reg layer reocognized with factor=" + l1_split[1])
-                    name = self.log_name + "_l1reg_" + str(len(layer_list))
-                    prev_layer = keras.layers.ActivityRegularization(l1=float(l1_split), name=name)(prev_layer)
+                    name = "l1reg_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.ActivityRegularization(l1=float(l1_split), name=name)(prev_layer)
                     layer_list.append(name)
 
                 # L2 regularization
@@ -178,16 +188,18 @@ class Network:
                         logger.warn("L2 reg layer recognized but invalid factor; skipping")
                         continue
                     logger.debug("L2 reg layer reocognized with factor=" + l2_split[1])
-                    name = self.log_name + "_l2reg_" + str(len(layer_list))
-                    prev_layer = keras.layers.ActivityRegularization(l2=float(l2_split), name=name)(prev_layer)
+                    name = "l2reg_{0}_{1}".format(len(layer_list), self.log_name)
+                    with K.name_scope(name):
+                        prev_layer = keras.layers.ActivityRegularization(l2=float(l2_split), name=name)(prev_layer)
                     layer_list.append(name)
 
                 else:
                     logger.warn("Unknown layer type: " + layer + ". Skipping")
             
             logger.debug("Model parameters: optimizer={0}, loss={1}, lr={2}".format(self.optimizer, self.loss, self.learning_rate))
-            self.model = keras.models.Model(inputs=inputs, outputs=prev_layer)
-            self.model.compile(optimizer=self.optimizer, loss=self.loss, metrics=self.metrics)
+            with K.name_scope("model"):
+                self.model = keras.models.Model(inputs=inputs, outputs=prev_layer)
+                self.model.compile(optimizer=self.optimizer, loss=self.loss, metrics=self.metrics)
             self.layer_list = layer_list
             logger.info("Model " + self.name + " finished creation")
         except Exception as e:
@@ -208,10 +220,11 @@ class Network:
         self.logger.info("Beginning training on model " + self.name)
         train_time = time.time()
 
-        history = self.model.fit(train_x, train_y, 
-            epochs=epochs, batch_size=stoch_batch,
-            validation_data=(test_x, test_y),
-            callbacks=callbacks)
+        with K.name_scope("train"): 
+            history = self.model.fit(train_x, train_y, 
+                epochs=epochs, batch_size=stoch_batch,
+                validation_data=(test_x, test_y),
+                callbacks=callbacks)
 
         train_time = time.time() - train_time # Seconds
         self.logger.info("Finished training model in " + str(train_time) + " seconds")
@@ -221,7 +234,8 @@ class Network:
         if self.model == None:
             return None
 
-        scores = self.model.evaluate(set_x, set_y)
+        with K.name_scope("eval"):
+            scores = self.model.evaluate(set_x, set_y)
         
         # scores[0] is always loss, scores[1+] is other stats
         statistics = dict(zip(self.model.metrics_names, scores))
@@ -230,4 +244,5 @@ class Network:
     def guess(self, set_x):
         if self.model == None:
             return None
-        return self.model.predict(set_x)
+        with K.name_scope("eval"):
+            return self.model.predict(set_x)

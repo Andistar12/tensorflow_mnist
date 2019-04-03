@@ -1,26 +1,27 @@
 {
     "log_prefix": "log",
     "log_format": "[%(levelname)s] [%(name)s %(asctime)s] %(message)s",
-    "storage_dir": "./networks",
+    "storage_dir": "./train_data",
 
     "rounding": 6,
-    "epochs": 2,
+    "epochs": 5,
     "epoch_update": 1,
-    "batch": 125,
+    "batch": 6000,
+    "pca_batch": 500,
 
     "networks": [
         {
-            "name": "linear300",
-            "layers": "flat-100-sigmoid-10-softmax",
-            "optimizer": ["adam", "adamax"],
+            "name": "dense300",
+            "layers": "flat-300-sigmoid-dropout_0.2-10-softmax",
+            "optimizer": ["rmsprop", "adamax"],
             "learning_rate": [0.01, 0.005],
             "loss": "categorical_crossentropy",
             "input_shape": [28, 28]
         },
         {
-            "name": "conv-1fc",
-            "layers": "reshape_28_28_1-conv2d_64_5_1-maxpool_2-flatten-256-relu-10-softmax",
-            "optimizer": ["adam", "adamax"],
+            "name": "dense800",
+            "layers": "flat-800-sigmoid-dropout_0.2-10-softmax",
+            "optimizer": ["rmsprop", "adamax"],
             "learning_rate": [0.01, 0.005],
             "loss": "categorical_crossentropy",
             "input_shape": [28, 28]

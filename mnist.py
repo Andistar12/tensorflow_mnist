@@ -1,3 +1,6 @@
+# File to train MNIST networks from a config.json file of the same directory
+# This script should be compatible with TF 2.0 
+
 from __future__ import print_function
 import time
 import datetime
@@ -7,8 +10,8 @@ import sys
 import json
 import os
 from tensorflow import keras
-from PIL import Image
 from network import Network 
+from tensorflow.keras import backend as K
 
 # Load config file
 try:
@@ -21,6 +24,8 @@ except Exception:
 # Get Hyperhyperparameters
 ROUNDING = int(config.get("rounding", 6))
 NETWORKS_LOC = config.get("storage_loc", "./networks")
+if not NETWORKS_LOC.endswith("/"):
+    NETWORKS_LOC += "/"
 log_prefix = config.get("log_prefix", "")
 log_format = config.get("log_format", "[%(levelname)s] [%(name)s %(asctime)s] %(message)s")
 epochs = config.get("epochs", 0)
@@ -57,20 +62,6 @@ X_TEST = X_TEST.astype("float32")
 logger.info("MNIST train and test data loaded")
 Y_TRAIN = keras.utils.to_categorical(Y_TRAIN, 10)
 Y_TEST = keras.utils.to_categorical(Y_TEST, 10)
-
-# Load in our data
-X_OURS = []
-Y_OURS = []
-for image_index in range(10):
-    image = Image.open("images/" + str(image_index) + ".jpg").convert("L")
-    array = np.array(image)
-    array = 1 - np.resize(array, (28,28))
-    X_OURS.append(array)
-    Y_OURS.append(image_index)
-X_OURS = np.array(X_OURS).astype("float32")
-Y_OURS = np.array(Y_OURS)
-Y_OURS = keras.utils.to_categorical(Y_OURS, 10)
-logger.info("Our data loaded")
 
 # Load in networks
 networks = list()
@@ -127,36 +118,33 @@ for net in networks:
     # Build network and setup callbacks
     logger.info("Building network " + net.name)
     net.build()
-    storage_loc = NETWORKS_LOC + "/" + net.name
+    storage_loc = NETWORKS_LOC + net.name + "/"
 
-    """
-    keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=0, batch_size=32, write_graph=True, write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None, embeddings_data=None, update_freq='epoch')
-    """
+    with K.name_scope("callbacks"):
+        tb = keras.callbacks.TensorBoard(
+                log_dir=storage_loc,
+                histogram_freq=epoch_update,
+                batch_size=batch,
+                write_graph=True,
+                write_grads=False,
+                write_images=False,
 
-    tb = keras.callbacks.TensorBoard(
-            log_dir=storage_loc,
-            histogram_freq=epoch_update,
-            batch_size=batch,
-            write_graph=True,
-            write_grads=False,
-            write_images=False,
+                # Bugged, check here in the future
+                # https://github.com/tensorflow/tensorboard/issues/2074
+                # embeddings_freq=1,
+                # embeddings_data=X_OURS,
+                # embeddings_layer_names=None,
+                # embeddings_metadata="/images/metadata.tsv",
 
-            # Bugged, check here in the future
-            # https://github.com/tensorflow/tensorboard/issues/2074
-            # embeddings_freq=1,
-            # embeddings_data=X_OURS,
-            # embeddings_layer_names=None,
-            # embeddings_metadata="/images/metadata.tsv",
-
-            update_freq="epoch")
-    checkpoint = keras.callbacks.ModelCheckpoint(
-            storage_loc + ".hdf5-{epoch:02d}",
-            monitor="val_loss", 
-            save_best_only=True, 
-            save_weights_only=True,
-            mode="auto",
-            period=epoch_update)
-    callbacks = [checkpoint, tb]
+                update_freq="epoch")
+        checkpoint = keras.callbacks.ModelCheckpoint(
+                storage_loc + net.name + ".hdf5",
+                monitor="val_loss", 
+                save_best_only=True, 
+                save_weights_only=True,
+                mode="auto",
+                period=epoch_update)
+        callbacks = [checkpoint, tb]
 
     logger.info("Training network " + net.name)
     history = net.train(X_TRAIN, Y_TRAIN, X_TEST, Y_TEST, epochs, batch, callbacks)
@@ -167,20 +155,15 @@ for net in networks:
 
     # Gather evaluation statistics
     logger.info("Gathering statistics")
-    guess = net.guess(X_OURS)
     train_stats = net.evaluate(X_TRAIN, Y_TRAIN)
     train_stats = ["{0} {1}".format(k, round(float(v), ROUNDING)) for k, v in train_stats.items()]
     test_stats = net.evaluate(X_TEST, Y_TEST)
     test_stats = ["{0} {1}".format(k, round(float(v), ROUNDING)) for k, v in test_stats.items()]
-    our_stats = net.evaluate(X_OURS, Y_OURS)
-    our_stats = ["{0} {1}".format(k, round(float(v), ROUNDING)) for k, v in our_stats.items()]
 
     # Output
     logger.info("----------------------- TEST RESULTS ------------------------")
     logger.info("Train stats: " + " ".join(train_stats))
     logger.info("Test stats: " + " ".join(test_stats))
-    logger.info("Our stats: " + " ".join(our_stats))
-    logger.info("Our predictions: " + str([np.argmax(x) for x in guess]))
 
     # Reset
     keras.backend.clear_session()
