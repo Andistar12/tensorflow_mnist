@@ -1,3 +1,7 @@
+"""
+Network defined 
+"""
+
 import time
 import numpy as np
 import logging
@@ -5,6 +9,7 @@ import json
 from tensorflow import keras
 from tensorflow.keras import backend as K
 
+"""
 # LOL GOTTA WAIT FOR TF 1.14 TO FIX THIS
 # https://github.com/tensorflow/tensorboard/issues/1666
 class TensorBoardWithSession(keras.callbacks.TensorBoard):
@@ -15,7 +20,7 @@ class TensorBoardWithSession(keras.callbacks.TensorBoard):
         super().__init__(**kwargs)
 
 keras.callbacks.TensorBoard = TensorBoardWithSession # Override
-
+"""
 
 # Hyperhyperparameters
 ACTIVATORS = ["elu", "relu", "selu", "softmax", "softsign", "tanh", "hard_sigmoid", "sigmoid", "linear"]
