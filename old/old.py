@@ -1,3 +1,8 @@
+"""
+My second neural network program
+Beginning to abstract network creation
+No limit on layers, but network still defined as a function
+"""
 # Second neural network program, beginnings of network layer abstraction
 
 import tensorflow as tf

@@ -1,3 +1,8 @@
+"""
+Generates a sprite used to create PCA visalizations under Tensorboard
+Just a test file, the create_sprit_image method is copied to mnist-proj.py
+"""
+
 import numpy as np
 from PIL import Image
 from tensorflow import keras

@@ -1,4 +1,8 @@
-# First neural network program, has basic skeleton of a network
+"""
+My first neural network program
+Contains a basic skeleton of a network, defined by a function
+Just trying to get things working, limited to 2 hidden layers
+"""
 
 import tensorflow as tf
 import numpy as np

@@ -1,3 +1,7 @@
+"""
+Tensorflow program that uses gradient descent to solve systems of equations
+"""
+
 import tensorflow as tf
 import numpy as np
 tf.logging.set_verbosity(tf.logging.ERROR) #Console logging level

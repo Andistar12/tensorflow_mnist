@@ -1,4 +1,8 @@
-# Third neural network program, output standardization and abstraction
+"""
+My third neural network program
+Starting to abstract key methods and standardize output
+Switched to Keras API, network still hardcoded
+"""
 
 import tensorflow as tf
 import numpy as np

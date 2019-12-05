@@ -1,4 +1,8 @@
-# Fourth neural network program, full network abstraction
+"""
+My fourth neural network program
+Full network abstraction with the keras API
+Network defined by a string now
+"""
 
 from __future__ import print_function
 import time

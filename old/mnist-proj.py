@@ -1,5 +1,9 @@
-# File to generate visualizations with trained networks
-# This file is NOT compatible with TF 2.0
+"""
+Program to generate PCA visualizations with trained networks from mnist.py
+This file is NOT compatible with TF 2.0 and should be dropped when porting to TF 2.0
+Networks must be trained with mnist.py before being processed with this 
+"""
+
 from __future__ import print_function
 import time
 import datetime
