@@ -224,7 +224,8 @@ class Network:
             history = self.model.fit(train_x, train_y, 
                 epochs=epochs, batch_size=stoch_batch,
                 validation_data=(test_x, test_y),
-                callbacks=callbacks)
+                callbacks=callbacks,
+                verbose=2)
 
         train_time = time.time() - train_time # Seconds
         self.logger.info("Finished training model in " + str(train_time) + " seconds")
@@ -235,7 +236,7 @@ class Network:
             return None
 
         with K.name_scope("eval"):
-            scores = self.model.evaluate(set_x, set_y)
+            scores = self.model.evaluate(set_x, set_y, verbose=0)
         
         # scores[0] is always loss, scores[1+] is other stats
         statistics = dict(zip(self.model.metrics_names, scores))
