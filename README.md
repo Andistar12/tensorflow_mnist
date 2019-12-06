@@ -19,13 +19,19 @@ To view TensorBoard results, run `pipenv run tensorboard --logdir <training data
 
 ## Best results
 
-Network: etc
+Linear Neural Network
 
-Training data: xx.xx% accuracy
+* Training data: 99.27% accuracy
+* Validation data: 97.37% accuracy
+* My handwriting: 10/10 accuracy
+* Network parameters: `flat-800-sigmoid-dropout_0.25-10-softmax`, "op=rmsprop,lr=0.002,ls=categorical_crossentropy"
 
-Validation data: xx.xx% accuracy
+Convoluted Neural Network
 
-My handwriting: 100.00% accuracy
+* Training data: 99.86% accuracy
+* Validation data: 98.31% accuracy
+* My handwriting: 8/10 accuracy
+* Network parameters: `reshape_28_28_1-conv2d_64_3_1-relu-maxpool_2-flatten-dropout_0.25-64-relu-10-softmax`, "op=rmsprop,lr=0.002,ls=categorical_crossentropy"
 
 ## Technical details
 
