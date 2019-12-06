@@ -70,7 +70,7 @@ X_OURS = []
 Y_OURS = []
 for image_index in range(10):
     image = Image.open("images/" + str(image_index) + ".jpg").convert("L")
-    array = np.array(image)
+    array = 1-np.array(image)
     array = np.resize(array, (28,28))
     X_OURS.append(array)
     Y_OURS.append(image_index)
@@ -191,7 +191,7 @@ for net in networks:
     keras.backend.clear_session()
 
     # Write guesses to log
-    writer = tfs.create_file_writer("ours")
+    writer = tfs.create_file_writer(storage_loc + "our_data")
     with writer.as_default():
         for i in range(10):
             for j in range(10):
