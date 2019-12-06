@@ -9,6 +9,8 @@ import logging
 import sys
 import json
 import os
+from PIL import Image
+from tensorflow import summary as tfs
 from tensorflow import keras
 from network import Network 
 from tensorflow.keras import backend as K
@@ -62,6 +64,18 @@ X_TEST = X_TEST.astype("float32")
 logger.info("MNIST train and test data loaded")
 Y_TRAIN = keras.utils.to_categorical(Y_TRAIN, 10)
 Y_TEST = keras.utils.to_categorical(Y_TEST, 10)
+
+# Load in our data
+X_OURS = []
+Y_OURS = []
+for image_index in range(10):
+    image = Image.open("images/" + str(image_index) + ".jpg").convert("L")
+    array = np.array(image)
+    array = np.resize(array, (28,28))
+    X_OURS.append(array)
+    Y_OURS.append(image_index)
+X_OURS = np.array(X_OURS).astype("float32")
+Y_OURS = keras.utils.to_categorical(Y_OURS, 10)
 
 # Load in networks
 networks = list()
@@ -159,13 +173,29 @@ for net in networks:
     train_stats = ["{0} {1}".format(k, round(float(v), ROUNDING)) for k, v in train_stats.items()]
     test_stats = net.evaluate(X_TEST, Y_TEST)
     test_stats = ["{0} {1}".format(k, round(float(v), ROUNDING)) for k, v in test_stats.items()]
+    our_stats = net.evaluate(X_OURS, Y_OURS)
+    our_stats = ["{0} {1}".format(k, round(float(v), ROUNDING)) for k, v in our_stats.items()]
+    guess = net.guess(X_OURS)
+    guess_argmax = [np.argmax(a) for a in guess]
 
     # Output
     logger.info("----------------------- TEST RESULTS ------------------------")
+    logger.info("Network name: " + net.name)
     logger.info("Train stats: " + " ".join(train_stats))
     logger.info("Test stats: " + " ".join(test_stats))
+    logger.info("Our stats: " + " ".join(our_stats))
+    logger.info("Guesses: " + str(guess_argmax))
+    logger.info("-------------------------------------------------------------")
 
     # Reset
     keras.backend.clear_session()
+
+    # Write guesses to log
+    writer = tfs.create_file_writer("ours")
+    with writer.as_default():
+        for i in range(10):
+            for j in range(10):
+                tfs.scalar("our_data_" + str(i), guess[i][j], step=j)
+                writer.flush()
 
 logger.info("All training finished. Quitting")
